@@ -5,54 +5,57 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-public class @{CLASS_NAME}@ : EditorWindow
+namespace CustomScriptTemplate
 {
-    private string _scriptName = "";
+	public class @{CLASS_NAME}@ : EditorWindow
+	{
+		private string _scriptName = "";
 
-    [MenuItem("Assets/Create/C# Scripts/@{CLASS_NAME}@", priority=82)]
-    public static void ShowCreateScriptWindow()
-    {
-		var instance = ScriptableObject.CreateInstance<@{CLASS_NAME}@>();
-        instance.position = new Rect(Screen.width / 2.0f, Screen.height / 2.0f, 250, 80);
-        instance.ShowPopup();
-    }
-
-	private void OnGUI()
-    {
-        EditorGUILayout.LabelField("Enter script name:");
-
-        GUI.SetNextControlName("ScriptName");
-        _scriptName = GUILayout.TextField(_scriptName);
-        GUI.FocusControl("ScriptName");
-
-        if (GUILayout.Button("Create"))
+		[MenuItem("Assets/Create/C# Scripts/@{CLASS_NAME}@", priority=82)]
+		public static void ShowCreateScriptWindow()
 		{
-			CustomScriptTemplate.CreateScriptFromTemplate(GetNewScriptPath(), _scriptName, "@{CLASS_NAME}@");
-            AssetDatabase.Refresh();
-			Close();
+			var instance = ScriptableObject.CreateInstance<@{CLASS_NAME}@>();
+			instance.position = new Rect(Screen.width / 2.0f, Screen.height / 2.0f, 250, 80);
+			instance.ShowPopup();
 		}
 
-        if(Event.current != null && Event.current.isKey)
-        {
-            // Return or Enter event
-            if(Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
-            {
+		private void OnGUI()
+		{
+			EditorGUILayout.LabelField("Enter script name:");
+
+			GUI.SetNextControlName("ScriptName");
+			_scriptName = GUILayout.TextField(_scriptName);
+			GUI.FocusControl("ScriptName");
+
+			if (GUILayout.Button("Create"))
+			{
 				CustomScriptTemplate.CreateScriptFromTemplate(GetNewScriptPath(), _scriptName, "@{CLASS_NAME}@");
-                AssetDatabase.Refresh();
-                Close();
-            }
+				AssetDatabase.Refresh();
+				Close();
+			}
 
-            // Escape event
-            if(Event.current.keyCode == KeyCode.Escape)
-            {
-                Close();
-            }
-        }
-    }
+			if(Event.current != null && Event.current.isKey)
+			{
+				// Return or Enter event
+				if(Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
+				{
+					CustomScriptTemplate.CreateScriptFromTemplate(GetNewScriptPath(), _scriptName, "@{CLASS_NAME}@");
+					AssetDatabase.Refresh();
+					Close();
+				}
 
-    private string GetNewScriptPath()
-    {
-        return $"{AssetDatabase.GetAssetPath(Selection.activeObject)}";
-    }
+				// Escape event
+				if(Event.current.keyCode == KeyCode.Escape)
+				{
+					Close();
+				}
+			}
+		}
+
+		private string GetNewScriptPath()
+		{
+			return $"{AssetDatabase.GetAssetPath(Selection.activeObject)}";
+		}
+	}
 }
 #endif

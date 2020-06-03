@@ -22,9 +22,14 @@ public class CustomScriptTemplateEditor : EditorWindow
 
     private string _createTemplateName = "";
 
+    private string _namespaceRootDirectory = "";
+    private string _namespacePrefix = "";
+
     private void Awake()
     {
         _templatesDirectory = CustomScriptTemplate.GetTemplatesDirectory();
+        _namespaceRootDirectory = CustomScriptTemplate.GetNamespaceRootDir();
+        _namespacePrefix = CustomScriptTemplate.GetNamespacePrefix();
     }
 
     void OnGUI()
@@ -72,7 +77,7 @@ public class CustomScriptTemplateEditor : EditorWindow
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Create new template", new GUIStyle() { fontSize = 16 });
 
-            EditorGUILayout.LabelField("Enter file name:");
+            EditorGUILayout.LabelField("Template name:");
             _createTemplateName = EditorGUILayout.TextField(_createTemplateName);
             if(GUILayout.Button("Create"))
             {
@@ -90,6 +95,22 @@ public class CustomScriptTemplateEditor : EditorWindow
             {
                 _templatesDirectory = templatesDirectory;
                 CustomScriptTemplate.SetTemplatesDirectory(_templatesDirectory);
+            }
+
+            EditorGUILayout.LabelField("Namespace root directory (relative to Assets):");
+            var namespaceRootDir = EditorGUILayout.TextField(_namespaceRootDirectory);
+            if(namespaceRootDir != _namespaceRootDirectory)
+            {
+                _namespaceRootDirectory = namespaceRootDir;
+                CustomScriptTemplate.SetNamespaceRootDir(_namespaceRootDirectory);
+            }
+
+            EditorGUILayout.LabelField("Namespace prefix:");
+            var namespacePrefix = EditorGUILayout.TextField(_namespacePrefix);
+            if(namespacePrefix != _namespacePrefix)
+            {
+                _namespacePrefix = namespacePrefix;
+                CustomScriptTemplate.SetNamespacePrefix(_namespacePrefix);
             }
         }
         EditorGUILayout.EndVertical();

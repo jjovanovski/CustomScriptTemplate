@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyNamespace
+namespace @{NAMESPACE_PREFIX}@@{NAMESPACE}@
 {
 	public class @{CLASS_NAME}@ : MonoBehaviour
 	{

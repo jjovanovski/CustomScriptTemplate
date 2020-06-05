@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ namespace CustomScriptTemplate
             var menuScriptContent = GetMenuScriptTemplateContent();
             var className = templateName.Replace(".txt", "");
             menuScriptContent = menuScriptContent.Replace(CLASS_NAME_WILDCARD, className);
-            File.WriteAllText(GetMenuScriptPath(templateName), menuScriptContent);
+            File.WriteAllText(GetMenuScriptPath(templateName), NormalizeLineBreaks(menuScriptContent));
         }
 
         public static void CreateScriptFromTemplate(string scriptPath, string className, string templateName)
@@ -48,7 +49,7 @@ namespace CustomScriptTemplate
             templateContent = templateContent.Replace(NAMESPACE_WILDCARD, namespaceForPath);
             templateContent = templateContent.Replace(NAMESPACE_PREFIX_WILDCARD, namespacePrefix);
 
-            File.WriteAllText(Path.Combine(scriptPath, $"{className}.cs"), templateContent);
+            File.WriteAllText(Path.Combine(scriptPath, $"{className}.cs"), NormalizeLineBreaks(templateContent));
         }
 
         public static void EditTemplate(string templateName, string content)
@@ -136,6 +137,42 @@ namespace CustomScriptTemplate
                 // if the root path is NOT prefix of the path, return empty string since anything else doesn't make much sense
                 return string.Empty;
             }
+        }
+
+        private static string NormalizeLineBreaks(string input)
+        {
+            // Allow 10% as a rough guess of how much the string may grow.
+            // If we're wrong we'll either waste space or have extra copies -
+            // it will still work
+            StringBuilder builder = new StringBuilder((int)(input.Length * 1.1));
+
+            bool lastWasCR = false;
+
+            foreach (char c in input)
+            {
+                if (lastWasCR)
+                {
+                    lastWasCR = false;
+                    if (c == '\n')
+                    {
+                        continue; // Already written \r\n
+                    }
+                }
+                switch (c)
+                {
+                    case '\r':
+                        builder.Append("\r\n");
+                        lastWasCR = true;
+                        break;
+                    case '\n':
+                        builder.Append("\r\n");
+                        break;
+                    default:
+                        builder.Append(c);
+                        break;
+                }
+            }
+            return builder.ToString();
         }
     }
 }

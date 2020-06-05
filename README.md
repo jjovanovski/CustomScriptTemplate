@@ -5,7 +5,6 @@ Unity plugin that helps you create and manage custom script templates.
 https://github.com/jjovanovski/CustomScriptTemplate/releases
 
 #### Go to Assets -> Custom Script Templates to edit the templates
-(NOTE: If you don't see all settings, resize the window. Will be fixed in next versions.)
 ![](https://i.imgur.com/n2bCkaQ.png)
 
 #### Create a script from a template by going to Create -> C# Scripts -> [Your Template]

@@ -61,8 +61,14 @@ namespace CustomScriptTemplate
 
         public static void DeleteTemplate(string templateName)
         {
-            File.Delete(GetTemplatePath(templateName));
-            File.Delete(GetMenuScriptPath(templateName));
+            var templatePath = GetTemplatePath(templateName);
+            var menuScriptPath = GetMenuScriptPath(templateName);
+
+            File.Delete(templatePath);
+            File.Delete($"{templatePath}.meta");
+
+            File.Delete(menuScriptPath);
+            File.Delete($"{menuScriptPath}.meta");
         }
 
         public static string GetTemplatesDirectory()

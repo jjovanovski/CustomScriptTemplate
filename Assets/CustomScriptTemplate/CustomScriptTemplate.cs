@@ -21,6 +21,8 @@ namespace CustomScriptTemplate
         public const string NAMESPACE_WILDCARD = "@{NAMESPACE}@";
         public const string NAMESPACE_PREFIX_WILDCARD = "@{NAMESPACE_PREFIX}@";
 
+        private static CustomScriptTemplateSettings _settings;
+
         public static void CreateTemplate(string templateName)
         {
             // create the template file
@@ -65,32 +67,50 @@ namespace CustomScriptTemplate
 
         public static string GetTemplatesDirectory()
         {
-            return EditorPrefs.GetString(TEMPLATES_DIRECTORY_KEY, DEFAULT_TEMPLATES_DIRECTORY);
+            if(_settings == null)
+                _settings = Resources.Load<CustomScriptTemplateSettings>("CustomScriptTemplateSettings");
+            return _settings.TemplatesDirectory;
         }
 
         public static void SetTemplatesDirectory(string directory)
         {
-            EditorPrefs.SetString(TEMPLATES_DIRECTORY_KEY, directory);
+            if (_settings == null)
+                _settings = Resources.Load<CustomScriptTemplateSettings>("CustomScriptTemplateSettings");
+
+            _settings.TemplatesDirectory = directory;
+            EditorUtility.SetDirty(_settings);
         }
 
         public static string GetNamespaceRootDir()
         {
-            return EditorPrefs.GetString(NAMESPACE_ROOT_DIR_KEY, DEFAULT_NAMESPACE_ROOT_DIR);
+            if (_settings == null)
+                _settings = Resources.Load<CustomScriptTemplateSettings>("CustomScriptTemplateSettings");
+            return _settings.NamespaceRootDirectory;
         }
 
         public static void SetNamespaceRootDir(string rootDir)
         {
-            EditorPrefs.SetString(NAMESPACE_ROOT_DIR_KEY, rootDir);
+            if (_settings == null)
+                _settings = Resources.Load<CustomScriptTemplateSettings>("CustomScriptTemplateSettings");
+
+            _settings.NamespaceRootDirectory = rootDir;
+            EditorUtility.SetDirty(_settings);
         }
 
         public static string GetNamespacePrefix()
         {
-            return EditorPrefs.GetString(NAMESPACE_PREFIX_KEY, DEFAULT_NAMESSPACE_PREFIX);
+            if (_settings == null)
+                _settings = Resources.Load<CustomScriptTemplateSettings>("CustomScriptTemplateSettings");
+            return _settings.NamespacePrefix;
         }
 
         public static void SetNamespacePrefix(string prefix)
         {
-            EditorPrefs.SetString(NAMESPACE_PREFIX_KEY, prefix);
+            if (_settings == null)
+                _settings = Resources.Load<CustomScriptTemplateSettings>("CustomScriptTemplateSettings");
+
+            _settings.NamespacePrefix = prefix;
+            EditorUtility.SetDirty(_settings);
         }
 
         public static string GetTemplatePath(string templateName)

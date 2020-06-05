@@ -165,6 +165,25 @@ namespace CustomScriptTemplate
             }
         }
 
+        public static string[] GetTemplateNames()
+        {
+            var templatesDirectory = GetTemplatesDirectory();
+            if (!Directory.Exists($"Assets/{templatesDirectory}"))
+            {
+                Directory.CreateDirectory($"Assets/{templatesDirectory}");
+            }
+
+            var files = Directory.GetFiles($"Assets/{templatesDirectory}", "*.txt");
+            var templateNames = new string[files.Length];
+
+            for (var i = 0; i < files.Length; i++)
+            {
+                templateNames[i] = Path.GetFileNameWithoutExtension(files[i]);
+            }
+
+            return templateNames;
+        }
+
         private static string NormalizeLineBreaks(string input)
         {
             // Allow 10% as a rough guess of how much the string may grow.

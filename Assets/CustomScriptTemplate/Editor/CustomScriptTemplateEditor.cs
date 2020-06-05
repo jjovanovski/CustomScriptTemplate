@@ -14,11 +14,10 @@ namespace CustomScriptTemplate
 
         private string _templatesDirectory;
 
-        private int _selectedScriptIndex;
-        private string[] _scripts;
+        private int _selectedTemplateIndex;
 
-        private int _readScript = -1;
-        private string _editScript;
+        private int _readTemplate = -1;
+        private string _editTemplate;
 
         private string _createTemplateName = "";
 
@@ -44,38 +43,38 @@ namespace CustomScriptTemplate
                 EditorGUILayout.Separator();
                 EditorGUILayout.LabelField("Templates", new GUIStyle() { fontSize = 16 });
 
-                FindTemplates();
+                var templates = CustomScriptTemplate.GetTemplateNames();
 
-                if (_scripts.Length > 0)
+                if (templates.Length > 0)
                 {
-                    _selectedScriptIndex = EditorGUILayout.Popup(_selectedScriptIndex, _scripts);
+                    _selectedTemplateIndex = EditorGUILayout.Popup(_selectedTemplateIndex, templates);
 
-                    if (_scripts != null && _scripts.Length > 0 && _readScript != _selectedScriptIndex)
+                    if (templates != null && templates.Length > 0 && _readTemplate != _selectedTemplateIndex)
                     {
-                        var selectedScriptName = _scripts[_selectedScriptIndex];
-                        _editScript = File.ReadAllText(GetTemplatePath(selectedScriptName));
-                        _readScript = _selectedScriptIndex;
+                        var selectedScriptName = templates[_selectedTemplateIndex];
+                        _editTemplate = File.ReadAllText(GetTemplatePath(selectedScriptName));
+                        _readTemplate = _selectedTemplateIndex;
                     }
-                    _editScript = EditorGUILayout.TextArea(_editScript);
+                    _editTemplate = EditorGUILayout.TextArea(_editTemplate);
 
-                    if (GUILayout.Button("Open in editor") && _scripts != null && _scripts.Length > 0)
+                    if (GUILayout.Button("Open in editor") && templates != null && templates.Length > 0)
                     {
-                        System.Diagnostics.Process.Start($"{Directory.GetCurrentDirectory()}/{GetTemplatePath(_scripts[_selectedScriptIndex])}");
-                    }
-
-                    if (GUILayout.Button("Save") && _scripts != null && _scripts.Length > 0)
-                    {
-                        File.WriteAllText(GetTemplatePath(_scripts[_selectedScriptIndex]), _editScript);
+                        System.Diagnostics.Process.Start($"{Directory.GetCurrentDirectory()}/{GetTemplatePath(templates[_selectedTemplateIndex])}");
                     }
 
-                    if (GUILayout.Button("Delete") && _scripts != null && _scripts.Length > 0)
+                    if (GUILayout.Button("Save") && templates != null && templates.Length > 0)
                     {
-                        CustomScriptTemplate.DeleteTemplate(_scripts[_selectedScriptIndex]);
+                        File.WriteAllText(GetTemplatePath(templates[_selectedTemplateIndex]), _editTemplate);
+                    }
+
+                    if (GUILayout.Button("Delete") && templates != null && templates.Length > 0)
+                    {
+                        CustomScriptTemplate.DeleteTemplate(templates[_selectedTemplateIndex]);
                         AssetDatabase.Refresh();
 
-                        _selectedScriptIndex = 0;
-                        _readScript = -1;
-                        _editScript = "";
+                        _selectedTemplateIndex = 0;
+                        _readTemplate = -1;
+                        _editTemplate = "";
                     }
                 }
                 else
@@ -128,22 +127,6 @@ namespace CustomScriptTemplate
             }
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndScrollView();
-        }
-
-        private void FindTemplates()
-        {
-            if (!Directory.Exists($"Assets/{_templatesDirectory}"))
-            {
-                Directory.CreateDirectory($"Assets/{_templatesDirectory}");
-            }
-
-            var files = Directory.GetFiles($"Assets/{_templatesDirectory}", "*.txt");
-            _scripts = new string[files.Length];
-
-            for (var i = 0; i < files.Length; i++)
-            {
-                _scripts[i] = Path.GetFileNameWithoutExtension(files[i]);
-            }
         }
 
         private string GetTemplatePath(string templateName)

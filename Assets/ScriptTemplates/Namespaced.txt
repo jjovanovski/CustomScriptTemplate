@@ -5,15 +5,15 @@ using UnityEngine;
 namespace @{NAMESPACE_PREFIX}@@{NAMESPACE}@
 {
 	public class @{CLASS_NAME}@ : MonoBehaviour
-	{
-    		void Start()
-    		{
-        
-    		}
+	{
+		void Start()
+		{
+			
+		}
 
-    		void Update()
-    		{
-        
-    		}
+		void Update()
+		{
+			
+		}
 	}
 }

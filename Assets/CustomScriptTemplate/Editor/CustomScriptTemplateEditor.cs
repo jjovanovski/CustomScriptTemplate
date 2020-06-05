@@ -25,6 +25,8 @@ namespace CustomScriptTemplate
         private string _namespaceRootDirectory = "";
         private string _namespacePrefix = "";
 
+        private Vector2 _scrollPosition;
+
         private void Awake()
         {
             _templatesDirectory = CustomScriptTemplate.GetTemplatesDirectory();
@@ -34,6 +36,7 @@ namespace CustomScriptTemplate
 
         void OnGUI()
         {
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
             EditorGUILayout.BeginVertical();
             {
                 /* === TEMPLATES === */
@@ -114,6 +117,7 @@ namespace CustomScriptTemplate
                 }
             }
             EditorGUILayout.EndVertical();
+            EditorGUILayout.EndScrollView();
         }
 
         private void FindTemplates()

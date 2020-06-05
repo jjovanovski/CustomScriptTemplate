@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,3 +15,4 @@ namespace CustomScriptTemplate
         public string NamespacePrefix = CustomScriptTemplate.DEFAULT_NAMESSPACE_PREFIX;
     }
 }
+#endif

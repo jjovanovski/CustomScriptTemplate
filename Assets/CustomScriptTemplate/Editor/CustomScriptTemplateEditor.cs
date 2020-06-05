@@ -45,34 +45,44 @@ namespace CustomScriptTemplate
                 EditorGUILayout.LabelField("Templates", new GUIStyle() { fontSize = 16 });
 
                 FindTemplates();
-                _selectedScriptIndex = EditorGUILayout.Popup(_selectedScriptIndex, _scripts);
 
-                if (_scripts != null && _scripts.Length > 0 && _readScript != _selectedScriptIndex)
+                if (_scripts.Length > 0)
                 {
-                    var selectedScriptName = _scripts[_selectedScriptIndex];
-                    _editScript = File.ReadAllText(GetTemplatePath(selectedScriptName));
-                    _readScript = _selectedScriptIndex;
+                    _selectedScriptIndex = EditorGUILayout.Popup(_selectedScriptIndex, _scripts);
+
+                    if (_scripts != null && _scripts.Length > 0 && _readScript != _selectedScriptIndex)
+                    {
+                        var selectedScriptName = _scripts[_selectedScriptIndex];
+                        _editScript = File.ReadAllText(GetTemplatePath(selectedScriptName));
+                        _readScript = _selectedScriptIndex;
+                    }
+                    _editScript = EditorGUILayout.TextArea(_editScript);
+
+                    if (GUILayout.Button("Open in editor") && _scripts != null && _scripts.Length > 0)
+                    {
+                        System.Diagnostics.Process.Start($"{Directory.GetCurrentDirectory()}/{GetTemplatePath(_scripts[_selectedScriptIndex])}");
+                    }
+
+                    if (GUILayout.Button("Save") && _scripts != null && _scripts.Length > 0)
+                    {
+                        File.WriteAllText(GetTemplatePath(_scripts[_selectedScriptIndex]), _editScript);
+                    }
+
+                    if (GUILayout.Button("Delete") && _scripts != null && _scripts.Length > 0)
+                    {
+                        CustomScriptTemplate.DeleteTemplate(_scripts[_selectedScriptIndex]);
+                        AssetDatabase.Refresh();
+
+                        _selectedScriptIndex = 0;
+                        _readScript = -1;
+                        _editScript = "";
+                    }
                 }
-                _editScript = EditorGUILayout.TextArea(_editScript);
-
-                if (GUILayout.Button("Open in editor") && _scripts != null && _scripts.Length > 0)
+                else
                 {
-                    System.Diagnostics.Process.Start($"{Directory.GetCurrentDirectory()}/{GetTemplatePath(_scripts[_selectedScriptIndex])}");
-                }
-
-                if (GUILayout.Button("Save") && _scripts != null && _scripts.Length > 0)
-                {
-                    File.WriteAllText(GetTemplatePath(_scripts[_selectedScriptIndex]), _editScript);
-                }
-
-                if (GUILayout.Button("Delete") && _scripts != null && _scripts.Length > 0)
-                {
-                    CustomScriptTemplate.DeleteTemplate(_scripts[_selectedScriptIndex]);
-                    AssetDatabase.Refresh();
-
-                    _selectedScriptIndex = 0;
-                    _readScript = -1;
-                    _editScript = "";
+                    EditorGUILayout.Separator();
+                    EditorGUILayout.LabelField("No templates created.");
+                    EditorGUILayout.Separator();
                 }
 
                 /* === CREATE NEW TEMPLATE === */

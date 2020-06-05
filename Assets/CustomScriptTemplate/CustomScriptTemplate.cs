@@ -125,14 +125,17 @@ namespace CustomScriptTemplate
 
             var pathAbs = Path.GetFullPath(path);
             var rootDirAbs = Path.GetFullPath(rootDir);
-            Debug.Log(pathAbs);
-            Debug.Log(rootDirAbs);
             if (pathAbs.StartsWith(rootDirAbs))
             {
+                // if the root dir path is prefix of the path, remove it
                 path = pathAbs.Substring(rootDirAbs.Length);
+                return path.Trim('\\', '/', '.').Replace('\\', '.').Replace('/', '.');
             }
-
-            return path.Trim('\\', '/', '.').Replace('\\', '.').Replace('/', '.');
+            else
+            {
+                // if the root path is NOT prefix of the path, return empty string since anything else doesn't make much sense
+                return string.Empty;
+            }
         }
     }
 }
